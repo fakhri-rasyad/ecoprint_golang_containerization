@@ -1,0 +1,711 @@
+basePath: /
+definitions:
+  models.BoilingSessionCreation:
+    properties:
+      esp_public_id:
+        type: string
+      fabric_type:
+        type: string
+      kompor_public_id:
+        type: string
+    required:
+    - esp_public_id
+    - fabric_type
+    - kompor_public_id
+    type: object
+  models.BoilingSessionResponse:
+    properties:
+      boiling_status:
+        type: string
+      created_at:
+        type: string
+      esp_id:
+        type: integer
+      fabric_type:
+        type: string
+      finished_at:
+        type: string
+      kompor_id:
+        type: integer
+      public_id:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.BoilingSessionStatusUpdate:
+    properties:
+      status:
+        type: string
+    required:
+    - status
+    type: object
+  models.CreateEspRequest:
+    properties:
+      mac_address:
+        type: string
+    required:
+    - mac_address
+    type: object
+  models.EspBase:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      device_status:
+        type: string
+      internal_id:
+        type: integer
+      is_active:
+        type: boolean
+      mac_address:
+        type: string
+      public_id:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.KomporBase:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      internal_id:
+        type: integer
+      is_active:
+        type: boolean
+      kompor_name:
+        type: string
+      public_id:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.KomporRequest:
+    properties:
+      kompor_name:
+        type: string
+    required:
+    - kompor_name
+    type: object
+  models.SessionRecordOutput:
+    properties:
+      air_temp:
+        type: number
+      created_at:
+        type: string
+      humidity:
+        type: number
+      public_id:
+        type: string
+      session_id:
+        type: integer
+      water_temp:
+        type: number
+    type: object
+  models.UserDataResponse:
+    properties:
+      email:
+        type: string
+      role:
+        type: string
+      username:
+        type: string
+    type: object
+  models.UserLoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  models.UserLoginResponse:
+    properties:
+      token:
+        type: string
+      username:
+        type: string
+    type: object
+  models.UserRegisterRequest:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 6
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  utils.Response:
+    properties:
+      data: {}
+      error:
+        type: string
+      message:
+        type: string
+      status:
+        type: string
+      statusCode:
+        type: integer
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:3000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: API untuk sistem monitoring perebusan kain ecoprint
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Hiliriset Ecoprint API
+  version: "1.0"
+paths:
+  /api/v1/esps:
+    get:
+      description: Endpoint untuk mengambil daftar esps pengguna
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.EspBase'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: GetEsps
+      tags:
+      - Esps
+    post:
+      consumes:
+      - application/json
+      description: Endpoint untuk menambahkan esp baru
+      parameters:
+      - description: Raw json body
+        in: body
+        name: esp
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateEspRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.EspBase'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: CreateEsp
+      tags:
+      - Esps
+  /api/v1/esps/{public_id}:
+    delete:
+      description: Endpoint untuk menghapus esp menggunakan public id
+      parameters:
+      - description: Public ID ESP
+        in: path
+        name: public_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: DeleteEsp
+      tags:
+      - Esps
+    get:
+      description: Endpoint untuk mengambil detail esp menggunakan public id
+      parameters:
+      - description: Public ID ESP
+        in: path
+        name: public_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.EspBase'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: GetEspByPublicID
+      tags:
+      - Esps
+  /api/v1/kompors:
+    get:
+      description: Mengembalikan daftar kompor pengguna
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.KomporBase'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: GetKompors
+      tags:
+      - Kompors
+    post:
+      consumes:
+      - application/json
+      description: Menambahkan kompor pengguna
+      parameters:
+      - description: Raw json kompor data
+        in: body
+        name: kompor
+        required: true
+        schema:
+          $ref: '#/definitions/models.KomporRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.KomporBase'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: AddKompor
+      tags:
+      - Kompors
+  /api/v1/kompors/{public_id}:
+    delete:
+      description: Menghapus kompor berdasarkan public id
+      parameters:
+      - description: Public ID Kompor
+        in: path
+        name: public_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: DeleteKompor
+      tags:
+      - Kompors
+    get:
+      description: Mengambil detail kompor berdasarkan public id
+      parameters:
+      - description: Public ID Kompor
+        in: path
+        name: public_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.KomporBase'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: GetKomporByPublicID
+      tags:
+      - Kompors
+  /api/v1/records/{record_id}:
+    get:
+      description: Mengambil detail satu record berdasarkan public id
+      parameters:
+      - description: Public ID record
+        in: path
+        name: record_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SessionRecordOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: GetRecordByPubID
+      tags:
+      - SessionRecords
+  /api/v1/sessions:
+    get:
+      description: Mengembalikan daftar sesi perebusan pengguna
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.BoilingSessionResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: GetSessions
+      tags:
+      - BoisingSessions
+    post:
+      consumes:
+      - application/json
+      description: Membuat sesi perebusan baru
+      parameters:
+      - description: Data sesi perebusan
+        in: body
+        name: session
+        required: true
+        schema:
+          $ref: '#/definitions/models.BoilingSessionCreation'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.BoilingSessionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: CreateSession
+      tags:
+      - BoisingSessions
+  /api/v1/sessions/{public_id}:
+    get:
+      description: Mengambil detail sesi perebusan berdasarkan public id
+      parameters:
+      - description: Public ID Sesi
+        in: path
+        name: public_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BoilingSessionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: GetSessionByPublicID
+      tags:
+      - BoisingSessions
+  /api/v1/sessions/{public_id}/finish:
+    patch:
+      description: Menyelesaikan sesi perebusan
+      parameters:
+      - description: Public ID Sesi
+        in: path
+        name: public_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: FinishSession
+      tags:
+      - BoisingSessions
+  /api/v1/sessions/{public_id}/records:
+    get:
+      description: Mengemambil record telemetry untuk session
+      parameters:
+      - description: Public ID Sesi
+        in: path
+        name: public_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/utils.Response'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: GetSessionRecords
+      tags:
+      - BoisingSessions
+  /api/v1/sessions/{public_id}/status:
+    patch:
+      consumes:
+      - application/json
+      description: Memperbarui status sesi perebusan
+      parameters:
+      - description: Public ID Sesi
+        in: path
+        name: public_id
+        required: true
+        type: string
+      - description: Status baru sesi
+        in: body
+        name: status
+        required: true
+        schema:
+          $ref: '#/definitions/models.BoilingSessionStatusUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: UpdateSessionStatus
+      tags:
+      - BoisingSessions
+  /api/v1/sessions/{session_id}/records:
+    get:
+      description: Mengambil semua records berdasarkan session
+      parameters:
+      - description: Public ID session
+        in: path
+        name: session_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.SessionRecordOutput'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: GetRecords
+      tags:
+      - SessionRecords
+  /api/v1/sessions/{session_id}/ws:
+    get:
+      description: Connect via WebSocket to monitor live telemetry for a boiling session
+      parameters:
+      - description: Public ID session
+        in: path
+        name: session_id
+        required: true
+        type: string
+      responses: {}
+      summary: WebSocket session monitor
+      tags:
+      - WebSocket
+  /v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Endpoint untuk authentikasi dan verifikasi user
+      parameters:
+      - description: Data login user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserLoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Login user
+      tags:
+      - Users
+  /v1/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Endpoint untuk mendaftarkan akun user ke sistem
+      parameters:
+      - description: Data registrasi user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserRegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.UserDataResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Register akun user
+      tags:
+      - Users
+securityDefinitions:
+  ApiKeyAuth:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
