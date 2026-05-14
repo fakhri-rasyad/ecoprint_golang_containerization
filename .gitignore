@@ -29,3 +29,6 @@ go.work.sum
 # Editor/IDE
 # .idea/
 # .vscode/
+
+compose_exercise.yaml
+/golang_backend/example_Dockerfile
