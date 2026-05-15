@@ -17,18 +17,21 @@ services:
     networks:
       - backend
 
+  frontend:
+    build: ./reactJS_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+    restart: unless-stopped
+    networks:
+      - backend
+
   migrate:
     image: migrate/migrate
     volumes:
       - ./golang_backend/database/migrations:/migrations
-    command:
-      [
-        "-path",
-        "/migrations",
-        "-database",
-        "postgres://${DB_USERNAME}:${DB_PASSWORD}@postgres:${DB_PORT}/${DB_NAME}?sslmode=disable",
-        "up",
-      ]
+    command: [ "-path", "/migrations", "-database", "postgres://${DB_USERNAME}:${DB_PASSWORD}@postgres:${DB_PORT}/${DB_NAME}?sslmode=disable", "up" ]
     env_file:
       - ./golang_backend/.env
     depends_on:
@@ -50,7 +53,7 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}" ]
       interval: 5s
       timeout: 5s
       retries: 10
