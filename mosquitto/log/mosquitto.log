@@ -70,3 +70,5 @@
 1778853407: New connection from 172.20.0.4:45516 on port 1883.
 1778853407: New client connected from 172.20.0.4:45516 as hiliriset_ecoprint_backend (p4, c1, k30).
 1778853458: Client hiliriset_ecoprint_backend [172.20.0.4:45516] disconnected: connection closed by client.
+1778853570: New connection from 172.20.0.4:34882 on port 1883.
+1778853570: New client connected from 172.20.0.4:34882 as hiliriset_ecoprint_backend (p4, c1, k30).
