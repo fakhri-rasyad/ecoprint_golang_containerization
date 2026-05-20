@@ -6,11 +6,27 @@ Go/Fiber backend, stored in PostgreSQL, and visualized in a React dashboard.
 
 **Example:** 
 [![Watch the video](https://github.com/user-attachments/assets/d9c29220-0f37-4459-b226-68ae297b1598)](https://github.com/user-attachments/assets/b17dd770-b07c-420e-bc0c-39fd2405c03c) 
+
+---
+
 **Stack:** Go · Fiber · React · ECharts · PostgreSQL · MQTT · Docker
+
+---
 
 # Ecoprint — Docker Deployment Guide
 
 Full stack deployment for the Hiliriset Ecoprint monitoring system using Docker Compose.
+
+---
+
+## Features
+- Real-time sensor data via WebSocket
+- Historical temperature & humidity charts (Apache ECharts)  
+- JWT authentication
+- Automatic DB migrations on startup
+- One-command setup with Docker Compose
+
+---
 
 ## Stack Overview
 
@@ -25,7 +41,7 @@ Full stack deployment for the Hiliriset Ecoprint monitoring system using Docker 
 ---
 
 ## Architecture
-<img width="461" height="382" alt="Untitled Diagram drawio" src="https://github.com/user-attachments/assets/93ae6fa1-ff91-45f2-a5c9-8b1d399a1166" />
+![Architecture](https://github.com/user-attachments/assets/93ae6fa1-ff91-45f2-a5c9-8b1d399a1166)
 
 ## Prerequisites
 
