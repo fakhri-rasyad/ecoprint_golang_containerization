@@ -4,7 +4,8 @@ Real-time temperature and humidity monitoring system for closed spaces.
 An ESP microcontroller publishes sensor data over MQTT, ingested by a 
 Go/Fiber backend, stored in PostgreSQL, and visualized in a React dashboard.
 
-**Example:** [![Watch the video](https://github.com/fakhri-rasyad/ecoprint_golang_containerization/raw/0d76deb1fce3239e3fb261184c242f01978b008e/example_thumbnail.png)](https://github.com/fakhri-rasyad/ecoprint_golang_containerization/raw/0d76deb1fce3239e3fb261184c242f01978b008e/example.mp4) 
+**Example:** 
+[![Watch the video](https://github.com/user-attachments/assets/d9c29220-0f37-4459-b226-68ae297b1598)](https://github.com/user-attachments/assets/b17dd770-b07c-420e-bc0c-39fd2405c03c) 
 **Stack:** Go · Fiber · React · ECharts · PostgreSQL · MQTT · Docker
 
 # Ecoprint — Docker Deployment Guide
@@ -22,6 +23,9 @@ Full stack deployment for the Hiliriset Ecoprint monitoring system using Docker 
 | `migrate` | Runs DB migrations on startup | — |
 
 ---
+
+## Architecture
+<img width="461" height="382" alt="Untitled Diagram drawio" src="https://github.com/user-attachments/assets/93ae6fa1-ff91-45f2-a5c9-8b1d399a1166" />
 
 ## Prerequisites
 
